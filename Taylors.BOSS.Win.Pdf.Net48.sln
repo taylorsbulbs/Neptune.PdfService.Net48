@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29306.81
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taylors.BOSS.Win.Pdf.Net48", "src\Taylors.BOSS.Win.Pdf.Net48\Taylors.BOSS.Win.Pdf.Net48.csproj", "{33F27FC7-3DFC-4003-AC34-B3CFC6EEF6F5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{33F27FC7-3DFC-4003-AC34-B3CFC6EEF6F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33F27FC7-3DFC-4003-AC34-B3CFC6EEF6F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33F27FC7-3DFC-4003-AC34-B3CFC6EEF6F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33F27FC7-3DFC-4003-AC34-B3CFC6EEF6F5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7B8EC504-24C5-4A7A-B4AA-32EBB5F94820}
+	EndGlobalSection
+EndGlobal
