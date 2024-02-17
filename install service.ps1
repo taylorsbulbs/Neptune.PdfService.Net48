@@ -1,0 +1,1 @@
+﻿new-service -Name "Taylors.BOSS.Win.DocumentCreator48" -DisplayName "Neptune PDF Creator (48)" -BinaryPathName C:\Neptune\PdfService\Taylors.BOSS.Win.Pdf.exe -Description "Gets HTML source from MSMQ .\private$\neptunepdf48 and Creates PDF Document"

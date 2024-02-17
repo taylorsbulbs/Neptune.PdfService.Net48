@@ -62,6 +62,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DocumentDTO.cs" />
+    <Compile Include="DocumentFooter.cs" />
+    <Compile Include="Logging.cs" />
     <Compile Include="PdfCreator.cs">
       <SubType>Component</SubType>
     </Compile>
