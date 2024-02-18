@@ -32,11 +32,17 @@ namespace Taylors.BOSS.Win.DocumentCreator
 
             // Process the message...
             var dtos = m.Body as DocumentDTO[];
-            Parallel.ForEach(dtos, i =>
+            if (dtos.Length == 1)
             {
                 IPDFService pdfService = new PDFService();
-                pdfService.CreatePdf(i);
-            });
+                pdfService.CreatePdf(dtos[0]);
+            }
+            else
+                Parallel.ForEach(dtos, i =>
+                {
+                    IPDFService pdfService = new PDFService();
+                    pdfService.CreatePdf(i);
+                });
 
             // Restart the asynchronous receive operation.
             mq.BeginReceive();

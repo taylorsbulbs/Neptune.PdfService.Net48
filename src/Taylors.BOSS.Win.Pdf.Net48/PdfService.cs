@@ -28,7 +28,7 @@ namespace Taylors.BOSS.Win.DocumentCreator
                     MergePdfFilesIntoOnePdf(dto.MultiDocFiles, dto.SaveToFile);
                 else
                 {
-                    ConvertAndSaveHTMLToPDFFile(dto.Src, dto.SaveToFile, dto.InclPageNumbering, dto.FooterType, dto.FooterExtras, dto.FooterOnFirstPageOnly);
+                    ConvertAndSaveHTMLToPDFFile(dto.Src, dto.SaveToFile, dto.InclPageNumbering, dto.FooterType, dto.FooterExtras, dto.FooterOnFirstPageOnly, dto.TopMargin);
                 }
                 log.ReportStatus(dto.Id, DocumentStatus.Complete, dto.ConnectionString);
             }
@@ -39,7 +39,7 @@ namespace Taylors.BOSS.Win.DocumentCreator
 
         }
 
-        void ConvertAndSaveHTMLToPDFFile(string htmlToConvert, string outputFile, bool inclPageNumbering, FooterType footerType, string[] footerExtras, bool footerOnFirstPageOnly)
+        void ConvertAndSaveHTMLToPDFFile(string htmlToConvert, string outputFile, bool inclPageNumbering, FooterType footerType, string[] footerExtras, bool footerOnFirstPageOnly, float? topMargin)
         {
             PdfConverter pdfConv = new PdfConverter();
             pdfConv.LicenseKey = licenseKey;
@@ -48,7 +48,7 @@ namespace Taylors.BOSS.Win.DocumentCreator
             pdfConv.PdfDocumentOptions.PdfPageSize = PdfPageSize.A4;
             pdfConv.PdfDocumentOptions.ShowHeader = true; //blank header
             pdfConv.PdfDocumentOptions.ShowFooter = true;
-            pdfConv.PdfHeaderOptions.HeaderHeight = 25;
+            pdfConv.PdfHeaderOptions.HeaderHeight = topMargin ?? 25;
             pdfConv.PdfDocumentOptions.PdfCompressionLevel = PdfCompressionLevel.Normal;
             if (footerOnFirstPageOnly)
                 pdfConv.PrepareRenderPdfPageEvent += (PrepareRenderPdfPageParams e) =>
