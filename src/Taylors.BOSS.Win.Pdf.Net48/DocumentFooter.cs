@@ -65,12 +65,27 @@ namespace Taylors.BOSS.Win.DocumentCreator
 
         /// <summary>
         /// Used for a specific page of a document
+        /// Only used for Docs where the footer is only on the first page
         /// </summary>
         public void AddFooterText(PdfPage page, FooterType type, bool addPageNumbering, string[] footerExtras)
         {
             page.AddFooterTemplate(90);//replaces default footer
             var footer = page.Footer;
             footer.Height = 90;
+            var font = new Font(new FontFamily("Times New Roman"), 6, GraphicsUnit.Point);
+            void AddLeftText(string[] text, int y = 10)
+            {
+                var leftfooter = new TextElement(25, y, string.Join(Environment.NewLine, text), font);
+                leftfooter.TextAlign = HorizontalTextAlign.Left;
+                footer.AddElement(leftfooter);
+            }
+            void AddRightText(string[] text, int y = 10)
+            {
+                var rightfooter = new TextElement(0, 0, string.Join(Environment.NewLine, text), font);
+                rightfooter.Translate(-25, y); //move to the right (negative x value)
+                rightfooter.TextAlign = HorizontalTextAlign.Right;
+                footer.AddElement(rightfooter);
+            }
             switch (type)
             {
                 case FooterType.DespatchPickingList:
@@ -87,6 +102,24 @@ namespace Taylors.BOSS.Win.DocumentCreator
                     footer.AddElement(line);
                     footer.AddElement(noItems);
                     footer.AddElement(weight);
+                    break;
+                case FooterType.AtlasDefault:
+                    footer.Height = 75;
+                    string[] getRegisterdOffice(string companyNo, string vatRegNo)
+                    {
+                        return new string[] {
+                            "Registered Office: Washway House Farm, Holbeach",
+                            $"Registered in England {companyNo}",
+                            $"VAT Reg. No. GB {vatRegNo}"
+                        };
+                    }
+                    AddLeftText(directorInfo);
+                    AddRightText(getRegisterdOffice(footerExtras[0], footerExtras[1]));
+                    break;
+                case FooterType.AtlasBloembollen:
+                    footer.Height = 75;
+                    AddLeftText(directorInfoBloembollen);
+                    AddRightText(registeredOfficeBloembollen);
                     break;
                 default:
                     throw new ApplicationException("Footer type not implemented here");
@@ -291,24 +324,6 @@ namespace Taylors.BOSS.Win.DocumentCreator
                     leftfooter.TextAlign = HorizontalTextAlign.Left;
                     footer.AddElement(leftfooter);
                     AddRightText(registeredOffice, 11);
-                    break;
-                case FooterType.AtlasDefault:
-                    footer.FooterHeight = 75;
-                    string[] getRegisterdOffice(string companyNo, string vatRegNo)
-                    {
-                        return new string[] {
-                            "Registered Office: Washway House Farm, Holbeach",
-                            $"Registered in England {companyNo}",
-                            $"VAT Reg. No. GB {vatRegNo}"
-                        };
-                    }
-                    AddLeftText(directorInfo);
-                    AddRightText(getRegisterdOffice(footerExtras[0], footerExtras[1]));
-                    break;
-                case FooterType.AtlasBloembollen:
-                    footer.FooterHeight = 75;
-                    AddLeftText(directorInfoBloembollen);
-                    AddRightText(registeredOfficeBloembollen);
                     break;
                 default:
                     footer.FooterHeight = 70;
