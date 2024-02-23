@@ -46,8 +46,10 @@ namespace Taylors.BOSS.Win.DocumentCreator
         PurchasingBloembollenOrder = 11,
         PurchasingOrder = 12,
         SalesOrder = 13,
-        SalesOrderROIandBloembollen = 14, 
+        SalesOrderROIandBloembollen = 14,
         SupersedeReprint = 15,
+        AtlasDefault = 50,
+        AtlasBloembollen = 51,
         None = 99
     }
     public enum DocumentStatus

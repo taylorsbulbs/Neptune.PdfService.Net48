@@ -292,6 +292,24 @@ namespace Taylors.BOSS.Win.DocumentCreator
                     footer.AddElement(leftfooter);
                     AddRightText(registeredOffice, 11);
                     break;
+                case FooterType.AtlasDefault:
+                    footer.FooterHeight = 75;
+                    string[] getRegisterdOffice(string companyNo, string vatRegNo)
+                    {
+                        return new string[] {
+                            "Registered Office: Washway House Farm, Holbeach",
+                            $"Registered in England {companyNo}",
+                            $"VAT Reg. No. GB {vatRegNo}"
+                        };
+                    }
+                    AddLeftText(directorInfo);
+                    AddRightText(getRegisterdOffice(footerExtras[0], footerExtras[1]));
+                    break;
+                case FooterType.AtlasBloembollen:
+                    footer.FooterHeight = 75;
+                    AddLeftText(directorInfoBloembollen);
+                    AddRightText(registeredOfficeBloembollen);
+                    break;
                 default:
                     footer.FooterHeight = 70;
                     break;
