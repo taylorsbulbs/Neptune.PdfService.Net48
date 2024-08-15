@@ -1,1 +1,1 @@
-﻿new-service -Name "Taylors.BOSS.Win.Pdf.Net48" -DisplayName "Neptune Document Creator" -Description "Gets document details from MSMQ .\private$\neptunepdf48 and creates PDF" -BinaryPathName "C:\Repos\Neptune.PdfService.Net48\src\Taylors.BOSS.Win.Pdf.Net48\bin\Release" -StartupType Automatic
+﻿new-service -Name "Taylors.BOSS.Win.Pdf.Net48" -DisplayName "Neptune Pdf Creator" -Description "Gets document details from MSMQ .\private$\neptunepdf48 and creates PDF" -BinaryPathName "C:\Repos\Neptune.PdfService.Net48\src\Taylors.BOSS.Win.Pdf.Net48\bin\Release" -StartupType Automatic
