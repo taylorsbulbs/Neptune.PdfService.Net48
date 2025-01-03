@@ -68,27 +68,39 @@ namespace Taylors.BOSS.Win.DocumentCreator
         /// </summary>
         public void AddFooterText(int pageNo, PdfPage page, FooterType type, bool addPageNumbering, string[] footerExtras)
         {
-            page.AddFooterTemplate(90);//replaces default footer
-            var footer = page.Footer;
             var font = new Font(new FontFamily("Times New Roman"), 6, GraphicsUnit.Point);
-            void AddLeftText(string[] text, int y = 10)
+            var numberingFont = new Font(new FontFamily("Times New Roman"), 10, GraphicsUnit.Point);
+
+            void AddLeftText(Template footer, string[] text, int y = 10)
             {
                 var leftfooter = new TextElement(25, y, string.Join(Environment.NewLine, text), font);
                 leftfooter.TextAlign = HorizontalTextAlign.Left;
                 footer.AddElement(leftfooter);
             }
-            void AddRightText(string[] text, int y = 10)
+            void AddRightText(Template footer,string[] text, int y = 10)
             {
                 var rightfooter = new TextElement(0, 0, string.Join(Environment.NewLine, text), font);
                 rightfooter.Translate(-25, y); //move to the right (negative x value)
                 rightfooter.TextAlign = HorizontalTextAlign.Right;
                 footer.AddElement(rightfooter);
             }
+            void AddPageNumber(Template footer)
+            {
+                if (addPageNumbering)
+                {
+                    var pageNumber = new TextElement(0, footer.Height - 50, "Page &p; of &P;  ", numberingFont);
+                    pageNumber.TextAlign = HorizontalTextAlign.Center;
+                    footer.AddElement(pageNumber);
+                }
+            }
+
             switch (type)
             {
                 case FooterType.DespatchPickingList:
                     if (pageNo == 1)
                     {
+                        page.AddFooterTemplate(90);//replaces default footer
+                        var footer = page.Footer;
                         footer.Height = 90;
                         var pickingListfont = new Font(new FontFamily("Verdana"), 9, FontStyle.Bold, GraphicsUnit.Point);
                         var totalsHeader = new TextElement(30, 10, "Totals for Picking List", pickingListfont);
@@ -103,13 +115,21 @@ namespace Taylors.BOSS.Win.DocumentCreator
                         footer.AddElement(line);
                         footer.AddElement(noItems);
                         footer.AddElement(weight);
+                        AddPageNumber(footer);
                     }
-                    else footer.Height = 70;
+                    else
+                    {
+                        page.AddFooterTemplate(60);//replaces default footer
+                        AddPageNumber(page.Footer);
+                    }
                     break;
                 case FooterType.AtlasDefault:
-                    footer.Height = 75;
                     if (pageNo == 1)
                     {
+                        page.AddFooterTemplate(90);//replaces default footer
+                        var footer = page.Footer;
+                        footer.Height = 75;
+
                         string[] getRegisterdOffice(string companyNo, string vatRegNo)
                         {
                             return new string[] {
@@ -118,29 +138,36 @@ namespace Taylors.BOSS.Win.DocumentCreator
                                 $"VAT Reg. No. GB {vatRegNo}"
                             };
                         }
-                        AddLeftText(directorInfo);
-                        AddRightText(getRegisterdOffice(footerExtras[0], footerExtras[1]));
+                        AddLeftText(footer,directorInfo);
+                        AddRightText(footer,getRegisterdOffice(footerExtras[0], footerExtras[1]));
+                        AddPageNumber(footer);
+                    }
+                    else
+                    {
+                        page.AddFooterTemplate(60);//replaces default footer
+                        AddPageNumber(page.Footer);
                     }
                     break;
                 case FooterType.AtlasBloembollen:
-                    footer.Height = 75;
                     if (pageNo == 1)
                     {
-                        AddLeftText(directorInfoBloembollen);
-                        AddRightText(registeredOfficeBloembollen);
+                        page.AddFooterTemplate(90);//replaces default footer
+                        var footer = page.Footer;
+                        footer.Height = 75;
+                        AddLeftText(footer,directorInfoBloembollen);
+                        AddRightText(footer,registeredOfficeBloembollen);
+                        AddPageNumber(footer);
+                    }
+                    else
+                    {
+                        page.AddFooterTemplate(60);//replaces default footer
+                        AddPageNumber(page.Footer);
                     }
                     break;
                 default:
                     throw new ApplicationException("Footer type not implemented here");
             }
 
-            if (addPageNumbering)
-            {
-                var numberingFont = new Font(new FontFamily("Times New Roman"), 10, GraphicsUnit.Point);
-                var pageNumber = new TextElement(0, footer.Height - 50, "Page &p; of &P;  ", numberingFont);
-                pageNumber.TextAlign = HorizontalTextAlign.Center;
-                footer.AddElement(pageNumber);
-            }
         }
 
         /// <summary>
