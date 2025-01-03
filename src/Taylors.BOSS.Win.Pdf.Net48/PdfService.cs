@@ -48,11 +48,8 @@ namespace Taylors.BOSS.Win.DocumentCreator
             if (footerOnFirstPageOnly)
                 pdfConv.PrepareRenderPdfPageEvent += (PrepareRenderPdfPageParams e) =>
                 {
-                    if (e.PageNumber == 1)
-                    {
-                        var footer = new DocumentFooter();
-                        footer.AddFooterText(e.Page, footerType, inclPageNumbering, footerExtras);
-                    }
+                    var footer = new DocumentFooter();
+                    footer.AddFooterText(e.PageNumber, e.Page, footerType, inclPageNumbering, footerExtras);
                 };
             else
             {

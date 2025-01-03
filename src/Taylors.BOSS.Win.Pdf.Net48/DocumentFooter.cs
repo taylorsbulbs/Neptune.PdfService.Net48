@@ -64,14 +64,12 @@ namespace Taylors.BOSS.Win.DocumentCreator
         };
 
         /// <summary>
-        /// Used for a specific page of a document
-        /// Only used for Docs where the footer is only on the first page
+        /// Used when footer is not the same on all pages
         /// </summary>
-        public void AddFooterText(PdfPage page, FooterType type, bool addPageNumbering, string[] footerExtras)
+        public void AddFooterText(int pageNo, PdfPage page, FooterType type, bool addPageNumbering, string[] footerExtras)
         {
             page.AddFooterTemplate(90);//replaces default footer
             var footer = page.Footer;
-            footer.Height = 90;
             var font = new Font(new FontFamily("Times New Roman"), 6, GraphicsUnit.Point);
             void AddLeftText(string[] text, int y = 10)
             {
@@ -89,37 +87,48 @@ namespace Taylors.BOSS.Win.DocumentCreator
             switch (type)
             {
                 case FooterType.DespatchPickingList:
-                    var pickingListfont = new Font(new FontFamily("Verdana"), 9, FontStyle.Bold, GraphicsUnit.Point);
-                    var totalsHeader = new TextElement(30, 10, "Totals for Picking List", pickingListfont);
-                    totalsHeader.TextAlign = HorizontalTextAlign.Left;
-                    var line = new LineElement(30, 30, PdfPageSize.A4.Width - 30, 30);
-                    var noItems = new TextElement(30, 35, $"{footerExtras[0]} of {footerExtras[1]} Items", pickingListfont);
-                    noItems.TextAlign = HorizontalTextAlign.Left;
-                    var weight = new TextElement(0, 0, $"Weight {footerExtras[2]}", pickingListfont);
-                    weight.Translate(-30, 35); //move to the right (negative x value)
-                    weight.TextAlign = HorizontalTextAlign.Right;
-                    footer.AddElement(totalsHeader);
-                    footer.AddElement(line);
-                    footer.AddElement(noItems);
-                    footer.AddElement(weight);
+                    if (pageNo == 1)
+                    {
+                        footer.Height = 90;
+                        var pickingListfont = new Font(new FontFamily("Verdana"), 9, FontStyle.Bold, GraphicsUnit.Point);
+                        var totalsHeader = new TextElement(30, 10, "Totals for Picking List", pickingListfont);
+                        totalsHeader.TextAlign = HorizontalTextAlign.Left;
+                        var line = new LineElement(30, 30, PdfPageSize.A4.Width - 30, 30);
+                        var noItems = new TextElement(30, 35, $"{footerExtras[0]} of {footerExtras[1]} Items", pickingListfont);
+                        noItems.TextAlign = HorizontalTextAlign.Left;
+                        var weight = new TextElement(0, 0, $"Weight {footerExtras[2]}", pickingListfont);
+                        weight.Translate(-30, 35); //move to the right (negative x value)
+                        weight.TextAlign = HorizontalTextAlign.Right;
+                        footer.AddElement(totalsHeader);
+                        footer.AddElement(line);
+                        footer.AddElement(noItems);
+                        footer.AddElement(weight);
+                    }
+                    else footer.Height = 70;
                     break;
                 case FooterType.AtlasDefault:
                     footer.Height = 75;
-                    string[] getRegisterdOffice(string companyNo, string vatRegNo)
+                    if (pageNo == 1)
                     {
-                        return new string[] {
-                            "Registered Office: Washway House Farm, Holbeach",
-                            $"Registered in England {companyNo}",
-                            $"VAT Reg. No. GB {vatRegNo}"
-                        };
+                        string[] getRegisterdOffice(string companyNo, string vatRegNo)
+                        {
+                            return new string[] {
+                                "Registered Office: Washway House Farm, Holbeach",
+                                $"Registered in England {companyNo}",
+                                $"VAT Reg. No. GB {vatRegNo}"
+                            };
+                        }
+                        AddLeftText(directorInfo);
+                        AddRightText(getRegisterdOffice(footerExtras[0], footerExtras[1]));
                     }
-                    AddLeftText(directorInfo);
-                    AddRightText(getRegisterdOffice(footerExtras[0], footerExtras[1]));
                     break;
                 case FooterType.AtlasBloembollen:
                     footer.Height = 75;
-                    AddLeftText(directorInfoBloembollen);
-                    AddRightText(registeredOfficeBloembollen);
+                    if (pageNo == 1)
+                    {
+                        AddLeftText(directorInfoBloembollen);
+                        AddRightText(registeredOfficeBloembollen);
+                    }
                     break;
                 default:
                     throw new ApplicationException("Footer type not implemented here");
